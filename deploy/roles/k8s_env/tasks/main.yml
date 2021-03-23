@@ -1,0 +1,15 @@
+---
+- name: stop firewalld
+  systemd: name=firewalld state=stopped enabled=no
+
+- name: disabled selinux
+  shell: "setenforce 0 && sed -i 's/SELINUX=permissive/SELINUX=disabled/' /etc/sysconfig/selinux;sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config"
+
+- name: swap off
+  shell: "swapoff -a && sed -i 's/.*swap.*/#&/' /etc/fstab"
+
+- name: set k8s conf
+  template: src=k8s.conf.j2 dest=/etc/sysctl.d/k8s.conf
+
+- name: sysctl --system
+  shell: sysctl --system

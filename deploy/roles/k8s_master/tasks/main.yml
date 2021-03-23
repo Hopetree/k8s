@@ -1,0 +1,33 @@
+---
+- name: copy flannel file
+  copy: src=kube-flannel.yml dest={{ k8s.flannel.path }}
+
+- name: change image url for flannel file
+  replace: path={{ k8s.flannel.path }} regexp="quay\.io" replace={{ k8s.flannel.image_url }}
+
+- name: set k8s repo
+  template: src=kubernetes.repo.j2 dest=/etc/yum.repos.d/kubernetes.repo
+
+- name: uninstall kubectl kubeadm kubelet
+  yum: name=kubectl,kubeadm,kubelet state=absent
+
+- name: install kubectl
+  yum: name={{ k8s.kubectl }} state=present
+
+- name: install kubelet
+  yum: name={{ k8s.kubelet }} state=present
+
+- name: install kubeadm
+  yum: name={{ k8s.kubeadm }} state=present
+
+- name: set systemd for kubelet
+  systemd: name=kubelet enabled=yes daemon_reload=yes state=started
+
+- name: init kubeadm
+  shell: "kubeadm init --image-repository {{ k8s.image_repository }} --kubernetes-version {{ k8s.version }} --apiserver-advertise-address {{ ansible_ssh_host }} --pod-network-cidr={{ k8s.pod_netword }}/16 --token-ttl 0"
+
+- name: copy kube config
+  shell: "mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config"
+
+- name: apply flannel
+  shell: "kubectl apply -f {{ k8s.flannel.path }}"

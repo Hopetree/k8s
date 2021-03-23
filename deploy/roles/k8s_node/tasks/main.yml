@@ -1,0 +1,27 @@
+---
+- name: set k8s repo
+  template: src=kubernetes.repo.j2 dest=/etc/yum.repos.d/kubernetes.repo
+
+- name: uninstall kubectl kubeadm kubelet
+  yum: name=kubeadm,kubelet state=absent
+
+- name: install kubelet
+  yum: name={{ k8s.kubelet }} state=present
+
+- name: install kubeadm
+  yum: name={{ k8s.kubeadm }} state=present
+
+- name: set systemd for kubelet
+  systemd: name=kubelet enabled=yes daemon_reload=yes state=started
+
+- name: query kubeadm join command
+  shell: kubeadm token create --print-join-command
+  register: kubeadm_join_cmd
+  delegate_to: "{{ k8s.master_ip }}"        # 在主节点上面执行这个任务
+
+- name: print cmd
+  debug:
+    var: kubeadm_join_cmd.stdout
+
+- name: join k8s
+  shell: "{{ kubeadm_join_cmd.stdout }}"

@@ -1,0 +1,18 @@
+# ansible-playbook k8s_install.yml -i hosts -u alex -k -K
+---
+- hosts: k8s
+  roles:
+    - role: docker
+      become: yes
+    - role: k8s_env
+      become: yes
+
+- hosts: master
+  roles:
+    - role: k8s_master
+      become: yes
+
+- hosts: node
+  roles:
+    - role: k8s_node
+      become: yes

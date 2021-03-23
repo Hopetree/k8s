@@ -1,0 +1,24 @@
+---
+- name: uninstall docker
+  yum: name={{ docker.remove_list }} state=absent
+
+- name: rm docker dir
+  file: path={{ item }} state=absent
+  with_items:
+    - /var/lib/docker
+    - /var/run/docker
+
+- name: install yum-utils
+  yum: name=yum-utils state=present
+
+- name: add docker repo
+  shell: yum-config-manager --add-repo {{ docker.repo }}
+
+- name: install docker-ce
+  yum: name={{ docker.version }} state=present update_cache=True
+
+- name: set docker registry mirrors
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json
+
+- name: start docker service
+  systemd: name=docker enabled=yes daemon_reload=yes state=started

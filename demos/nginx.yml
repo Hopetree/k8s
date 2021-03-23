@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1                 # 资源api接口版本
+kind: Deployment                    # 资源类型
+metadata: # 元数据
+  name: nginx-deployment            # 资源名
+spec: # 详情
+  replicas: 2                       # 副本数
+  selector: # 选择标签
+    matchLabels: # 标签匹配
+      app: nginx-server             # 定义要匹配的标签，下面pod中必须有这个标签
+  template: # pod模板
+    metadata: # pod详情
+      labels: # 定义标签
+        app: nginx-server           # pod标签
+    spec: # pod详情
+      containers: # 容器
+        - name: nginx               # 容器名称
+          image: nginx:1.7.9        # 容器镜像
+          ports:
+            - name: http
+              containerPort: 80     # 容器暴露端口
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-service
+spec:
+  ports:
+    - name: nginx-port
+      port: 80                      # app服务的端口
+      protocol: TCP
+      targetPort: 8080              # 暴露给pod的端口
+      nodePort: 31080               # 暴露给node的端口，也就是k8s节点
+  type: NodePort
+  selector:
+    app: nginx-server
