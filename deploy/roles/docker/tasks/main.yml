@@ -17,6 +17,9 @@
 - name: install docker-ce
   yum: name={{ docker.version }} state=present update_cache=True
 
+- name: check /etc/docker
+  shell: mkdir -p /etc/docker
+
 - name: set docker registry mirrors
   template: src=daemon.json.j2 dest=/etc/docker/daemon.json
 
