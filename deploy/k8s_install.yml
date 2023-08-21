@@ -1,4 +1,5 @@
 # ansible-playbook k8s_install.yml -i hosts -u alex -k -K
+# 已经安装过docker可以执行ansible-playbook k8s_install.yml -i hosts -u alex -k -K --skip-tags=docker
 ---
 - hosts: k8s
   roles:
