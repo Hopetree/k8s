@@ -15,12 +15,7 @@
   shell: yum-config-manager --add-repo {{ docker.repo }}
 
 - name: install docker-ce
-  yum:
-    name: "{{ docker.version }}"
-    state: present
-    update_cache: True
-    args:
-      install_recommends: yes
+  yum: name={{ docker.version }} state=present update_cache=True
 
 - name: set docker registry mirrors
   template: src=daemon.json.j2 dest=/etc/docker/daemon.json
