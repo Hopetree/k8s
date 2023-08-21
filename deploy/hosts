@@ -2,7 +2,7 @@
 
 # ansible 执行机
 [local]
-CentOS-2 ansible_ssh_host=localhost ansible_connection=local
+local-host ansible_ssh_host=localhost ansible_connection=local
 
 # k8s master
 [master]

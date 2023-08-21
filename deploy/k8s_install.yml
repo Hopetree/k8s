@@ -4,6 +4,8 @@
   roles:
     - role: docker
       become: yes
+      tags:
+        - docker
     - role: k8s_env
       become: yes
 
