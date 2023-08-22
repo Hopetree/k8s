@@ -24,7 +24,7 @@
   systemd: name=kubelet enabled=yes daemon_reload=yes state=started
 
 - name: init kubeadm
-  shell: "kubeadm init --image-repository {{ k8s.image_repository }} --kubernetes-version {{ k8s.version }} --apiserver-advertise-address {{ ansible_ssh_host }} --pod-network-cidr={{ k8s.pod_netword }}/16 --token-ttl 0"
+  shell: "kubeadm init --image-repository {{ k8s.image_repository }} --kubernetes-version {{ k8s.version }} --apiserver-advertise-address {{ ansible_ssh_host }} --pod-network-cidr={{ k8s.pod_netword }} --token-ttl 0"
 
 - name: copy kube config
   shell: "mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config"

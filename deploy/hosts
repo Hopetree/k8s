@@ -6,12 +6,12 @@ local-host ansible_ssh_host=localhost ansible_connection=local
 
 # k8s master
 [master]
-k8s-master ansible_ssh_host=192.168.31.76
+k8s-master ansible_ssh_host=192.168.0.225
 
 # k8s nodes
 [node]
-k8s-node01 ansible_ssh_host=192.168.31.133
-k8s-node02 ansible_ssh_host=192.168.31.178
+k8s-node01 ansible_ssh_host=192.168.0.226
+k8s-node02 ansible_ssh_host=192.168.0.227
 
 # 父亲的参数可以继承给儿子
 [k8s:children]

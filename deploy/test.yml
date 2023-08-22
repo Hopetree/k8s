@@ -1,8 +1,0 @@
-# ansible-playbook test.yml -i hosts -v
----
-- name: 验证group_vars中的变量渲染结果
-  hosts: local
-  tasks:
-    - name: 打印变量值
-      debug:
-        var: k8s.master_ip
