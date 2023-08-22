@@ -12,15 +12,15 @@ docker:
     - docker-logrotate
     - docker-engine
 k8s:
-  version: v1.24.0
+  version: v1.22.0
   master_ip: "{{ hostvars['k8s-master'].ansible_ssh_host }}"
   image_repository: registry.aliyuncs.com/google_containers
   baseurl: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
   gpgkey: "https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg"
   pod_netword: 10.244.0.0/16
-  kubectl: kubectl-1.24.0-0
-  kubeadm: kubeadm-1.24.0-0
-  kubelet: kubelet-1.24.0-0
+  kubectl: kubectl-1.22.0-0
+  kubeadm: kubeadm-1.22.0-0
+  kubelet: kubelet-1.22.0-0
   flannel:
     path: /tmp/kube-flannel.yml
     image_url: quay.io
